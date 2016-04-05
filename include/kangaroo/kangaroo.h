@@ -42,3 +42,5 @@
 #include "cu_deconvolution.h"
 #include "cu_rof_denoising.h"
 #include "cu_tgv.h"
+#include "cu_gradient.h"
+

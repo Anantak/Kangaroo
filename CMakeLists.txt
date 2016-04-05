@@ -92,6 +92,7 @@ list(APPEND SRC_H
     ${INCDIR}/cu_convolution.h
     ${INCDIR}/cu_operations.h
     ${INCDIR}/hamming_distance.h
+    ${INCDIR}/cu_gradient.h
 )
 
 list(APPEND SRC_CU
@@ -123,13 +124,14 @@ list(APPEND SRC_CU
     ${SRC}/cu_remap.cu
     ${SRC}/cu_raycast.cu
     ${SRC}/cu_sdffusion.cu
+    ${SRC}/cu_gradient.cu
 )
 
 ################################################################################
 # Find required dependencies
 
 # Find CUDA toolkit. Thrust and NPP are bundled with CUDA toolkit.
-find_package(CUDA 7.0 REQUIRED)
+find_package(CUDA 6.5 REQUIRED)
 list( APPEND USER_INC ${CUDA_INCLUDE_DIRS} )
 set(HAVE_THRUST 1)
 set(HAVE_NPP 1)
@@ -175,6 +177,10 @@ if(OpenCV2_FOUND)
     list(APPEND LINK_LIBS ${OpenCV2_LIBRARIES} )
 endif()
 
+find_package(Pangolin 0.1 REQUIRED)
+    list(APPEND LINK_LIBS ${Pangolin_LIBRARIES} )
+
+
 #######################################################
 ## Create configure file for inclusion in library
 
@@ -194,6 +200,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include/kangaroo )
 include_directories( ${INTERNAL_INC} )
 cuda_add_library( ${LIBRARY_NAME} ${SRC_H} ${SRC_CU} )
 target_link_libraries(${LIBRARY_NAME} ${LINK_LIBS})
+include_directories(${Pangolin_INCLUDE_DIRS})
 
 ## Generate symbol export helper header on MSVC
 if(MSVC)
